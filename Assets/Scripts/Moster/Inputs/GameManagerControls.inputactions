@@ -1,0 +1,33 @@
+{
+    "name": "GameManager",
+    "maps": [
+        {
+            "name": "GameManager",
+            "id": "410898e1-b47c-4050-9d0c-d901221aed3e",
+            "actions": [
+                {
+                    "name": "SwitchCam",
+                    "type": "Button",
+                    "id": "81b36322-eb8d-47bc-9bf8-2e557b65cb69",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "522aa6c6-b4af-4d05-9636-64863b0437f9",
+                    "path": "<Keyboard>/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchCam",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
