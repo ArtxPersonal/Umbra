@@ -6,10 +6,11 @@ using UnityEngine.AI;
 public class Patrol : MonoBehaviour
 {
     public Transform target;
-    public GameObject fakeTarget;
+    private Vector3 playerLastLocation;
+    public Transform head;
+    private Vector3 raycastDirection;
 
-
-    private float attackR = 30f;
+    private float attackR = 50f;
     private float timer = 0f;
     private float countDownToIdle = 0f;
 
@@ -18,12 +19,8 @@ public class Patrol : MonoBehaviour
     public Transform[] patrolPoints;
     private int currentPatrolPoint;
 
-    private int currentPoint;
-
     private bool playerSeen = false;
-    private bool fakePlayerSeen = false;
-
-    
+       
     private void Awake()
     {
         guardNav = GetComponent<NavMeshAgent>();
@@ -37,101 +34,69 @@ public class Patrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RaycastHit hit;
-        float _distTo = Vector3.Distance(transform.position, target.position);
-        float _distToFake = Vector3.Distance(transform.position, fakeTarget.transform.position);
-
-        if (_distToFake <= attackR)
-        {
-            timer += Time.deltaTime;
-
-            if (timer > 3f)
-            {
-                if (Physics.Raycast(transform.position, fakeTarget.transform.position, out hit))
-                {
-
-                    if (hit.collider.CompareTag("FakePlayer"))
-                    {
-                        fakePlayerSeen = true;
-                        Debug.Log("Fake Player Seen");
-                    }
-
-                    else if (!hit.collider.CompareTag("FakePlayer"))
-                    {
-                        fakePlayerSeen = false;
-                    }
-                }
-
-                if (fakePlayerSeen && !playerSeen)
-                {
-                    transform.LookAt(fakeTarget.transform);
-
-                    Vector3 _moveTo = Vector3.MoveTowards(transform.position, fakeTarget.transform.position, 30f);
-                    guardNav.destination = _moveTo;
-                }
-                else if (!fakePlayerSeen && !playerSeen)
-                {
-                    transform.LookAt(fakeTarget.transform);
-
-                    Vector3 _moveTo = Vector3.MoveTowards(transform.position, fakeTarget.transform.position, 30f);
-                    guardNav.destination = _moveTo;
-
-                    countDownToIdle += Time.deltaTime;
-
-                    if (countDownToIdle >= 5f)
-                    {
-                        countDownToIdle = 0f;
-                        timer = 0f;
-                    }
-                }
-            }
-        }
+        
+        float _distTo = Vector3.Distance(head.position, target.position);
 
         if (_distTo <= attackR)
         {
             timer += Time.deltaTime;
-
-            if (timer > 3f)
-            {
-
-                if (Physics.Raycast(transform.position, target.position, out hit))
-                {
-                    if (hit.collider.CompareTag("Player"))
-                    {
-                        playerSeen = true;
-                    }
-
-                    else if (!hit.collider.CompareTag("Player") && playerSeen)
-                    {
-                        playerSeen = false;
-                    }
-                }
-
-                if (playerSeen)
-                {
-                    transform.LookAt(target);
-
-                    Vector3 _moveTo = Vector3.MoveTowards(transform.position, target.position, 30f);
-                    guardNav.destination = _moveTo;
-                }
-                else if (!playerSeen)
-                {
-                    transform.LookAt(target);
-
-                    Vector3 _moveTo = Vector3.MoveTowards(transform.position, target.position, 30f);
-                    guardNav.destination = _moveTo;
-
-                    countDownToIdle += Time.deltaTime;
-
-                    if (countDownToIdle >= 5f)
-                    {
-                        countDownToIdle = 0f;
-                        timer = 0f;
-                    }
-                }
-               
-            }
+            transform.LookAt(target);
         }
+        if (timer > 3f)
+        {
+            raycastDirection = (target.position - head.position).normalized;
+            RaycastHit hit;
+            if (Physics.Raycast(head.position,  raycastDirection, out hit, Mathf.Infinity))
+            {
+                Debug.DrawRay(head.position, raycastDirection * hit.distance, Color.red);
+                if (hit.collider.CompareTag("Player"))
+                {
+                    playerSeen = true;
+                    playerLastLocation = target.position;
+                    Debug.DrawRay(head.position, raycastDirection * hit.distance, Color.green);
+                }
+
+                else if (!hit.collider.CompareTag("Player") && playerSeen)
+                {
+                    playerSeen = false;
+                }
+            }
+
+            if (playerSeen)
+            {
+                transform.LookAt(target);
+
+                Vector3 _moveTo = target.position;
+                guardNav.destination = _moveTo;
+            }
+            else if (!playerSeen)
+            {
+                
+
+                if (playerLastLocation != null)
+                {
+                    transform.LookAt(playerLastLocation);
+                    Vector3 _moveTo =  playerLastLocation;
+                    guardNav.destination = _moveTo;
+
+                    if (guardNav.destination == null)
+                    {
+                        countDownToIdle += Time.deltaTime;
+                    }
+                }
+                    
+                
+                
+
+                if (countDownToIdle >= 5f)
+                {
+                    countDownToIdle = 0f;
+                    timer = 0f;
+                }
+            }
+               
+        }
+        
 
 
         //if (fakeTarget != null)

@@ -16,20 +16,24 @@ public class MonsterControlsScript : MonoBehaviour
     private Vector2 monsterMovement;
 
     [Header("PsyWall")]
-    bool canPsyWall = true;
+    private bool canPsyWall = true;
     public GameObject PsyWallPrefab;
     GameObject PsyWallCopy;
     public GameObject poofParticleWall;
     GameObject poofParticleWallCopy;
     bool stopPsyWallCoroutineBool = false;
 
-    [Header("FakeMan")]
-    public GameObject manPrefab;
-    GameObject manCopy;
-    bool canFakeMan = true;
-    public GameObject poofParicleMan;
-    GameObject poofParticleManCopy;
-    private NavMeshAgent fakeMan;
+    [Header("Teleport")]
+    private bool canTeleport = true;
+    
+
+    //[Header("FakeMan")]
+    //public GameObject manPrefab;
+    //GameObject manCopy;
+    //bool canFakeMan = true;
+    //public GameObject poofParicleMan;
+    //GameObject poofParticleManCopy;
+    //private NavMeshAgent fakeMan;
 
     // Start is called before the first frame update
     void Awake()
@@ -53,7 +57,7 @@ public class MonsterControlsScript : MonoBehaviour
 
     private void Start()
     {
-        monsterControls.LandControls.PsyWall.performed += PsyWallCast;
+        monsterControls.LandControls.PsyWall.performed += SpawnAtMousePosPsyWall;
         monsterControls.LandControls.Teleport.performed += Teleport;
         //monsterControls.LandControls.FakeMan.performed += FakeManCast;
     }
@@ -68,10 +72,7 @@ public class MonsterControlsScript : MonoBehaviour
     //{
     //    SpawnManAtMousPosFakeMan();
     //}
-    private void PsyWallCast(InputAction.CallbackContext context)
-    {
-        SpawnAtMousePosPsyWall();
-    }
+
 
     private void Movement()
     {
@@ -117,7 +118,7 @@ public class MonsterControlsScript : MonoBehaviour
     //    canFakeMan = true;
     //}
 
-    private void SpawnAtMousePosPsyWall()
+    private void SpawnAtMousePosPsyWall(InputAction.CallbackContext context)
     {
         if(Mouse.current.leftButton.wasPressedThisFrame && canPsyWall)
         {
@@ -152,6 +153,7 @@ public class MonsterControlsScript : MonoBehaviour
         Destroy(PsyWallCopy);
         yield return new WaitForSeconds(1);
         Destroy(poofParticleWallCopy);
+        yield return new WaitForSeconds(10);
         canPsyWall = true;
         yield break;
     }
@@ -162,6 +164,7 @@ public class MonsterControlsScript : MonoBehaviour
         Destroy(PsyWallCopy);
         yield return new WaitForSeconds(1);
         Destroy(poofParticleWallCopy);
+        yield return new WaitForSeconds(10);
         canPsyWall = true;
         yield break;
     }
@@ -175,7 +178,31 @@ public class MonsterControlsScript : MonoBehaviour
 
     public void Teleport(InputAction.CallbackContext context)
     {
-        monsterBody.AddForce(monsterVelocity * 10, ForceMode.Impulse);
+        if (canTeleport)
+        {
+            if(monsterVelocity == Vector3.zero)
+            {
+                movementSpeed = 25;
+                canTeleport = false;
+            }
+            else
+            {
+                movementSpeed = 25;
+                canTeleport = false;
+            }
+
+            StartCoroutine(ReloadTeleport());
+        }
+       
+    }
+
+    private IEnumerator ReloadTeleport()
+    {
+        yield return new WaitForSeconds(2);
+        movementSpeed = 10;
+        yield return new WaitForSeconds(13);
+        canTeleport = true;
+        yield break;
     }
 
 
