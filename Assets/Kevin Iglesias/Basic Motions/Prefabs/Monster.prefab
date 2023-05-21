@@ -537,6 +537,7 @@ GameObject:
   - component: {fileID: -6148867193454648430}
   - component: {fileID: 8158539538331517383}
   - component: {fileID: 5232041281669947339}
+  - component: {fileID: 3824844267595205287}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -594,7 +595,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &8158539538331517383
 CapsuleCollider:
@@ -623,10 +624,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
+  monsterBody: {fileID: -6148867193454648430}
+  movementSpeed: 10
   PsyWallPrefab: {fileID: 4605160197987373591, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
   poofParticleWall: {fileID: 3679318834660779514, guid: 7ee1f55b5b2176046a49faa769891ec9, type: 3}
-  manPrefab: {fileID: 4740889632669292109, guid: f6fd3f25844bc4a4f820f9225766c70c, type: 3}
-  poofParicleMan: {fileID: 12654647983476296, guid: a919c3ede07c7fe42b0893d2084a9d6f, type: 3}
+--- !u!114 &3824844267595205287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260597861999642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: e93e655fb0d49f04cb0e7bcb0e4e3734, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: LandControls
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1261804499409134
 GameObject:
   m_ObjectHideFlags: 0

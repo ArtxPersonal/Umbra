@@ -10,9 +10,10 @@ public class Patrol : MonoBehaviour
     public Transform head;
     private Vector3 raycastDirection;
 
-    private float attackR = 50f;
+    private float attackR = 30f;
     private float timer = 0f;
     private float countDownToIdle = 0f;
+    private float lostTimer = 0;
 
     private NavMeshAgent guardNav;
 
@@ -20,6 +21,9 @@ public class Patrol : MonoBehaviour
     private int currentPatrolPoint;
 
     private bool playerSeen = false;
+    private bool playerNoticed = false;
+    private bool playerLost = true;
+    private bool startTimer = false;
        
     private void Awake()
     {
@@ -34,98 +38,78 @@ public class Patrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        float _distTo = Vector3.Distance(head.position, target.position);
 
-        if (_distTo <= attackR)
-        {
-            timer += Time.deltaTime;
-            transform.LookAt(target);
-        }
-        if (timer > 3f)
+        //float _distTo = Vector3.Distance(head.position, target.position);
+
+
+        if (playerSeen || playerNoticed)
         {
             raycastDirection = (target.position - head.position).normalized;
             RaycastHit hit;
-            if (Physics.Raycast(head.position,  raycastDirection, out hit, Mathf.Infinity))
+            if (Physics.Raycast(head.position, raycastDirection, out hit, Mathf.Infinity))
             {
-                Debug.DrawRay(head.position, raycastDirection * hit.distance, Color.red);
                 if (hit.collider.CompareTag("Player"))
                 {
-                    playerSeen = true;
-                    playerLastLocation = target.position;
-                    Debug.DrawRay(head.position, raycastDirection * hit.distance, Color.green);
-                }
-
-                else if (!hit.collider.CompareTag("Player") && playerSeen)
-                {
-                    playerSeen = false;
-                }
-            }
-
-            if (playerSeen)
-            {
-                transform.LookAt(target);
-
-                Vector3 _moveTo = target.position;
-                guardNav.destination = _moveTo;
-            }
-            else if (!playerSeen)
-            {
-                
-
-                if (playerLastLocation != null)
-                {
-                    transform.LookAt(playerLastLocation);
-                    Vector3 _moveTo =  playerLastLocation;
-                    guardNav.destination = _moveTo;
-
-                    if (guardNav.destination == null)
+                    transform.LookAt(target);
+                    if (timer < 3)
                     {
-                        countDownToIdle += Time.deltaTime;
+                        timer += Time.deltaTime;
+                    }
+                    else if (timer >= 3)
+                    {
+                        lostTimer = 0f;
+                        playerNoticed = true;
+                        playerLost = false;
+                        playerLastLocation = target.position;
+                        transform.LookAt(playerLastLocation);
+                        Debug.DrawRay(head.position, raycastDirection * hit.distance, Color.green);
                     }
                 }
-                    
-                
-                
 
-                if (countDownToIdle >= 5f)
+                else if (!hit.collider.CompareTag("Player"))
                 {
-                    countDownToIdle = 0f;
-                    timer = 0f;
+                    Debug.DrawRay(head.position, raycastDirection * hit.distance, Color.red);
+                    lostTimer += Time.deltaTime;
+                    if (lostTimer >= 3f)
+                    {
+                        playerLost = true;
+                    }
                 }
             }
-               
         }
-        
 
 
-        //if (fakeTarget != null)
-        //{
-        //    transform.LookAt(fakeTarget);
+        if (playerNoticed)
+        {
+            transform.LookAt(playerLastLocation);
 
-        //    Vector3 _moveTo = Vector3.MoveTowards(transform.position, fakeTarget.position, 10000f);
-        //    guardNav.destination = _moveTo;
-        //}
+            Vector3 _moveTo = playerLastLocation;
+            guardNav.destination = _moveTo;
+            if (playerLost)
+            {
+                countDownToIdle += Time.deltaTime;
+                if (countDownToIdle >= 3f)
+                {
+                    playerNoticed = false;
+                    countDownToIdle = 0f;
+                }
+            }
+        }
+        else if (!playerNoticed)
+        {
+            countDownToIdle += Time.deltaTime;
 
-        // PatrolArea();
+            if (countDownToIdle >= 15f)
+            {
+                countDownToIdle = 0f;
+                timer = 0f;
+            }
+
+            // PatrolArea();
+        }
     }
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("FakePlayer"))
-    //    {
-    //        fakeTarget = other.gameObject.GetComponent<Transform>();
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.CompareTag("FakePlayer"))
-    //    {
-    //        fakeTarget = null;
-    //        countDownToIdle += Time.deltaTime;
-    //    }
-    //}
+    
+    
     private void PatrolArea()
     {
         if (playerSeen == false)
@@ -133,5 +117,21 @@ public class Patrol : MonoBehaviour
             //TODO patrol + return to current patrol point
         }
         
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerSeen = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerSeen = false;
+        }
     }
 }

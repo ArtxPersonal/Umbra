@@ -1446,6 +1446,9 @@ GameObject:
   - component: {fileID: 8309502262820635800}
   - component: {fileID: 897184269648338864}
   - component: {fileID: 6763025873725764197}
+  - component: {fileID: 7284338016189284581}
+  - component: {fileID: 254333947641617889}
+  - component: {fileID: 2325990816079938797}
   m_Layer: 0
   m_Name: Guard
   m_TagString: Guard
@@ -1500,9 +1503,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 1.9885082
+  m_Height: 1.7652419
   m_Direction: 1
-  m_Center: {x: 0, y: 0.9165602, z: 0}
+  m_Center: {x: 0, y: 1.0281934, z: 0}
 --- !u!54 &6763025873725764197
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1517,8 +1520,58 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!195 &7284338016189284581
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216363463278577508}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 7
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 200
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &254333947641617889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216363463278577508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 969490c8bcbd2f14a899fa546d4d652d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  head: {fileID: 0}
+  patrolPoints: []
+--- !u!135 &2325990816079938797
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216363463278577508}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 20
+  m_Center: {x: 0, y: 0, z: 16}
 --- !u!1 &8216379959904336610
 GameObject:
   m_ObjectHideFlags: 0

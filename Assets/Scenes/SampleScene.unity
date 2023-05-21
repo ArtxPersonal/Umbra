@@ -123,48 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: ac4bc6b13c5d46f4b956bcd2b69f5185, type: 2}
---- !u!1 &103598143 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8216363463278577508, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
-  m_PrefabInstance: {fileID: 1566247565}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &103598148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 103598143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 969490c8bcbd2f14a899fa546d4d652d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 1349567237}
-  head: {fileID: 1179953980}
-  patrolPoints: []
---- !u!195 &103598149
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 103598143}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 7
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 500
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1 &118250243
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,41 +254,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &392408149 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1260597861999642, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
-  m_PrefabInstance: {fileID: 1909990763}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &392408153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 392408149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: e93e655fb0d49f04cb0e7bcb0e4e3734, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: LandControls
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1 &434848673
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,11 +668,6 @@ MonoBehaviour:
   minViewDis: 25
   mouseSensitivity: 100
   monsterBody: {fileID: 1230312468}
---- !u!54 &998865502 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: -6148867193454648430, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
-  m_PrefabInstance: {fileID: 1909990763}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1065316189
 GameObject:
   m_ObjectHideFlags: 0
@@ -1248,18 +1166,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 897184269648338864, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
-      propertyPath: m_Height
-      value: 1.7652419
-      objectReference: {fileID: 0}
-    - target: {fileID: 897184269648338864, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
-      propertyPath: m_Center.y
-      value: 1.0281934
-      objectReference: {fileID: 0}
-    - target: {fileID: 6763025873725764197, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
-      propertyPath: m_Constraints
-      value: 32
-      objectReference: {fileID: 0}
+    - target: {fileID: 254333947641617889, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
+      propertyPath: head
+      value: 
+      objectReference: {fileID: 1179953980}
+    - target: {fileID: 254333947641617889, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1349567237}
     - target: {fileID: 8216363463278577508, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
       propertyPath: m_Name
       value: Guard
@@ -1317,14 +1231,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -6148867193454648430, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6148867193454648430, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
     - target: {fileID: 1260597861999642, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
       propertyPath: m_Name
       value: Monster
@@ -1381,13 +1287,5 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 963194227}
-    - target: {fileID: 5232041281669947339, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
-      propertyPath: monsterBody
-      value: 
-      objectReference: {fileID: 998865502}
-    - target: {fileID: 5232041281669947339, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
-      propertyPath: movementSpeed
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
