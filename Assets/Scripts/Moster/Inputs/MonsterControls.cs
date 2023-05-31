@@ -121,7 +121,7 @@ public class @MonsterControls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b5283910-ed32-4f41-88c4-200091935ddd"",
-                    ""path"": ""<Keyboard>/k"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -132,7 +132,7 @@ public class @MonsterControls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ca0f4084-6d43-4ed4-b949-f20dbeadfcc1"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

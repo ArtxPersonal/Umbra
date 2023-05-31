@@ -24,6 +24,11 @@ public class Patrol : MonoBehaviour
     private bool playerNoticed = false;
     private bool playerLost = true;
     private bool startTimer = false;
+
+    [Header("FakePlayer")]
+    private bool fakePlayerSeen = false;
+    public Transform fakeTarget;
+    private Vector3 fakePlayerLastLocation;
        
     private void Awake()
     {
@@ -40,7 +45,59 @@ public class Patrol : MonoBehaviour
     {
 
         //float _distTo = Vector3.Distance(head.position, target.position);
+        if(fakePlayerSeen && (!playerSeen || !playerNoticed))
+        {
+            raycastDirection = (fakeTarget.position - head.position).normalized;
 
+            RaycastHit hit;
+            if (Physics.Raycast(head.position, raycastDirection, out hit, Mathf.Infinity))
+            {
+                if (hit.collider.CompareTag("FakePlayer"))
+                {
+                    transform.LookAt(fakeTarget);
+                    if (timer < 3)
+                    {
+                        timer += Time.deltaTime;
+                    }
+                    else if (timer >= 3)
+                    {
+                        //lostTimer = 0f;
+                        // playerNoticed = true;
+                        //playerLost = false;
+                        //playerLastLocation = target.position;
+                        // transform.LookAt(playerLastLocation);
+                        fakePlayerLastLocation = fakeTarget.position;
+                        Debug.DrawRay(head.position, raycastDirection * hit.distance, Color.green);
+                    }
+                }
+
+                else if (!hit.collider.CompareTag("FakePlayer"))
+                {
+                    Debug.DrawRay(head.position, raycastDirection * hit.distance, Color.red);
+                    //lostTimer += Time.deltaTime;
+
+                    //if (lostTimer < 1.8f)
+                    //{
+                    //    playerLastLocation = target.position;
+                    //}
+
+                    //if (lostTimer >= 3f)
+                    //{
+                    //    playerLost = true;
+                    //}
+
+                    fakePlayerSeen = false;
+                }
+            }
+        }
+
+        if(fakePlayerSeen)
+        {
+            transform.LookAt(playerLastLocation);
+
+            Vector3 _fakeMoveTo = playerLastLocation;
+            guardNav.destination = _fakeMoveTo;
+        }
 
         if (playerSeen || playerNoticed)
         {
@@ -70,9 +127,15 @@ public class Patrol : MonoBehaviour
                 {
                     Debug.DrawRay(head.position, raycastDirection * hit.distance, Color.red);
                     lostTimer += Time.deltaTime;
+
+                    if (lostTimer < 1.8f)
+                    {
+                        playerLastLocation = target.position;
+                    }
+                    
                     if (lostTimer >= 3f)
                     {
-                        playerLost = true;
+                        playerLost = true;   
                     }
                 }
             }
@@ -125,6 +188,11 @@ public class Patrol : MonoBehaviour
         {
             playerSeen = true;
         }
+
+        if(other.CompareTag("FakePlayer"))
+        {
+            fakePlayerSeen = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -132,6 +200,11 @@ public class Patrol : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerSeen = false;
+        }
+
+        if (other.CompareTag("FakePlayer"))
+        {
+            fakePlayerSeen = false;
         }
     }
 }

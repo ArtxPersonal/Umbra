@@ -12,7 +12,7 @@ public class MonsterControlsScript : MonoBehaviour
 
     [Header("MonsterMovement")]
     public Rigidbody monsterBody;
-    [SerializeField] private int movementSpeed = 10;
+    [SerializeField] private int movementSpeed = 8;
     private Vector2 monsterMovement;
 
     [Header("PsyWall")]
@@ -21,19 +21,19 @@ public class MonsterControlsScript : MonoBehaviour
     GameObject PsyWallCopy;
     public GameObject poofParticleWall;
     GameObject poofParticleWallCopy;
-    bool stopPsyWallCoroutineBool = false;
+    public bool stopPsyWallCoroutineBool = false;
 
-    [Header("Teleport")]
-    private bool canTeleport = true;
-    
+    [Header("SpeedBoost")]
+    private bool speedBoost = true;
 
-    //[Header("FakeMan")]
-    //public GameObject manPrefab;
-    //GameObject manCopy;
-    //bool canFakeMan = true;
-    //public GameObject poofParicleMan;
-    //GameObject poofParticleManCopy;
-    //private NavMeshAgent fakeMan;
+
+    [Header("FakeMan")]
+    public GameObject manPrefab;
+    GameObject manCopy;
+    bool canFakeMan = true;
+    public GameObject poofParicleMan;
+    GameObject poofParticleManCopy;
+    private NavMeshAgent fakeMan;
 
     // Start is called before the first frame update
     void Awake()
@@ -58,8 +58,8 @@ public class MonsterControlsScript : MonoBehaviour
     private void Start()
     {
         monsterControls.LandControls.PsyWall.performed += SpawnAtMousePosPsyWall;
-        monsterControls.LandControls.Teleport.performed += Teleport;
-        //monsterControls.LandControls.FakeMan.performed += FakeManCast;
+        monsterControls.LandControls.Teleport.performed += SpeedBoost;
+        monsterControls.LandControls.FakeMan.performed += SpawnManAtMousPosFakeMan;
     }
 
     // Update is called once per frame
@@ -67,11 +67,6 @@ public class MonsterControlsScript : MonoBehaviour
     {
         Movement();
     }
-
-    //private void FakeManCast(InputAction.CallbackContext context)
-    //{
-    //    SpawnManAtMousPosFakeMan();
-    //}
 
 
     private void Movement()
@@ -82,41 +77,54 @@ public class MonsterControlsScript : MonoBehaviour
 
     }
 
-    //private void SpawnManAtMousPosFakeMan()
-    //{
-    //    if (Mouse.current.rightButton.wasPressedThisFrame && canFakeMan)
-    //    {
-    //        Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-    //        RaycastHit hit;
+    private void SpawnManAtMousPosFakeMan(InputAction.CallbackContext context)
+    {
+        if (Mouse.current.rightButton.wasPressedThisFrame && canFakeMan)
+        {
+            Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+            RaycastHit hit;
 
-    //        if (Physics.Raycast(ray, out hit))
-    //        {
-    //            canFakeMan = false;
-    //            manCopy = Instantiate(manPrefab, hit.point, transform.rotation) as GameObject;
-    //            fakeMan = manCopy.GetComponent<NavMeshAgent>();
-    //            fakeMan.destination = fakeMan.transform.position + fakeMan.transform.forward * 50;
-    //            StartCoroutine(FakeManActive());
-    //        }
-    //    }
-    //}
-    //IEnumerator FakeManActive()
-    //{
-    //    yield return new WaitForSeconds(10);
-    //    poofParticleManCopy = Instantiate(poofParicleMan, manCopy.transform.position, manCopy.transform.rotation);
-    //    Destroy(manCopy);
-    //    yield return new WaitForSeconds(1);
-    //    Destroy(poofParticleManCopy);
-    //    canFakeMan = true;
-    //}
+            if (Physics.Raycast(ray, out hit))
+            {
+                canFakeMan = false;
+                manPrefab.transform.position = transform.position;
+                manPrefab.transform.rotation = transform.rotation;
+                manPrefab.SetActive(true);
+                //manCopy = Instantiate(manPrefab, hit.point, transform.rotation) as GameObject;
+                fakeMan = manPrefab.GetComponent<NavMeshAgent>();
+                fakeMan.destination = fakeMan.transform.position + fakeMan.transform.forward * 50;
+                StartCoroutine(FakeManActive());
+            }
+        }
+    }
+    IEnumerator FakeManActive()
+    {
+        yield return new WaitForSeconds(10);
+        poofParicleMan.transform.position = manPrefab.transform.position;
+        poofParicleMan.transform.rotation = manPrefab.transform.rotation;
+        manPrefab.SetActive(false);
+        poofParicleMan.SetActive(true);
+        //poofParticleManCopy = Instantiate(poofParicleMan, manCopy.transform.position, manCopy.transform.rotation);
+        //Destroy(manCopy);
+        yield return new WaitForSeconds(1);
+        //Destroy(poofParticleManCopy);
+        poofParicleMan.SetActive(false);
+        canFakeMan = true;
+    }
 
-    //IEnumerator StopFakeMan()
-    //{
-    //    poofParticleManCopy = Instantiate(poofParicleMan, manCopy.transform.position, manCopy.transform.rotation);
-    //    Destroy(manCopy);
-    //    yield return new WaitForSeconds(1);
-    //    Destroy(poofParticleManCopy);
-    //    canFakeMan = true;
-    //}
+    IEnumerator StopFakeMan()
+    {
+        //poofParticleManCopy = Instantiate(poofParicleMan, manCopy.transform.position, manCopy.transform.rotation);
+        //Destroy(manCopy);
+        poofParicleMan.transform.position = manPrefab.transform.position;
+        poofParicleMan.transform.rotation = manPrefab.transform.rotation;
+        manPrefab.SetActive(false);
+        poofParicleMan.SetActive(true);
+        yield return new WaitForSeconds(1);
+        //Destroy(poofParticleManCopy);
+        poofParicleMan.SetActive(false);
+        canFakeMan = true;
+    }
 
     private void SpawnAtMousePosPsyWall(InputAction.CallbackContext context)
     {
@@ -128,7 +136,9 @@ public class MonsterControlsScript : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 canPsyWall = false;
-                PsyWallCopy = Instantiate(PsyWallPrefab, hit.point, Quaternion.identity) as GameObject;
+                //PsyWallCopy = Instantiate(PsyWallPrefab, hit.point, Quaternion.identity) as GameObject;
+                PsyWallPrefab.transform.position = hit.point;
+                PsyWallPrefab.SetActive(true);
                 StartCoroutine(PsyWallActive());
             }
         }
@@ -141,18 +151,23 @@ public class MonsterControlsScript : MonoBehaviour
             stopPsyWallCoroutineBool = false;
             yield break;
         }
-        if(PsyWallCopy == null)
-        {
-            poofParticleWallCopy = Instantiate(poofParticleWall, PsyWallCopy.transform.position, PsyWallCopy.transform.rotation);
-            yield return new WaitForSeconds(1);
-            Destroy(poofParticleWallCopy);
-            canPsyWall = true;
-            yield break;
-        }
-        poofParticleWallCopy = Instantiate(poofParticleWall, PsyWallCopy.transform.position, PsyWallCopy.transform.rotation);
-        Destroy(PsyWallCopy);
+        //if(PsyWallCopy == null)
+        //{
+        //    poofParticleWallCopy = Instantiate(poofParticleWall, PsyWallCopy.transform.position, PsyWallCopy.transform.rotation);
+        //    yield return new WaitForSeconds(1);
+        //    Destroy(poofParticleWallCopy);
+        //    canPsyWall = true;
+        //    yield break;
+        //}
+
+        //poofParticleWallCopy = Instantiate(poofParticleWall, PsyWallCopy.transform.position, PsyWallCopy.transform.rotation);
+        //Destroy(PsyWallCopy);
+        PsyWallPrefab.SetActive(false);
+        poofParticleWall.transform.position = PsyWallPrefab.transform.position;
+        poofParticleWall.SetActive(true);
         yield return new WaitForSeconds(1);
-        Destroy(poofParticleWallCopy);
+        poofParticleWall.SetActive(false);
+        //Destroy(poofParticleWallCopy);
         yield return new WaitForSeconds(10);
         canPsyWall = true;
         yield break;
@@ -160,48 +175,50 @@ public class MonsterControlsScript : MonoBehaviour
 
     IEnumerator StopPsyWall()
     {
-        poofParticleWallCopy = Instantiate(poofParticleWall, PsyWallCopy.transform.position, PsyWallCopy.transform.rotation);
-        Destroy(PsyWallCopy);
+        //poofParticleWallCopy = Instantiate(poofParticleWall, PsyWallCopy.transform.position, PsyWallCopy.transform.rotation);
+        poofParticleWall.transform.position = PsyWallPrefab.transform.position;
+        PsyWallPrefab.SetActive(false);
+        poofParticleWall.SetActive(true);
         yield return new WaitForSeconds(1);
-        Destroy(poofParticleWallCopy);
+        poofParticleWall.SetActive(false);
         yield return new WaitForSeconds(10);
         canPsyWall = true;
         yield break;
     }
 
     public void StopPsyWallFunction()
-    { 
+    {
         stopPsyWallCoroutineBool = true;
         StartCoroutine(StopPsyWall());
         StopCoroutine(PsyWallActive());
     }
 
-    public void Teleport(InputAction.CallbackContext context)
+    public void SpeedBoost(InputAction.CallbackContext context)
     {
-        if (canTeleport)
+        if (speedBoost)
         {
             if(monsterVelocity == Vector3.zero)
             {
-                movementSpeed = 25;
-                canTeleport = false;
+                movementSpeed = 12;
+                speedBoost = false;
             }
             else
             {
-                movementSpeed = 25;
-                canTeleport = false;
+                movementSpeed = 12;
+                speedBoost = false;
             }
 
-            StartCoroutine(ReloadTeleport());
+            StartCoroutine(ReloadSpeedBoost());
         }
        
     }
 
-    private IEnumerator ReloadTeleport()
+    private IEnumerator ReloadSpeedBoost()
     {
         yield return new WaitForSeconds(2);
-        movementSpeed = 10;
+        movementSpeed = 8;
         yield return new WaitForSeconds(13);
-        canTeleport = true;
+        speedBoost = true;
         yield break;
     }
 

@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject mosterCam;
     public GameObject guardCam;
 
-    public bool psyWallHit = false;
+    //public bool psyWallHit = false;
 
     private void Awake()
     {

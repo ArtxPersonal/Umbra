@@ -11,9 +11,9 @@ public class FakeManCol : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
     }
     // Start is called before the first frame update
-    private void OnTriggerEnter(Collider other)
-    {
-        //GameManager.Instance.psyWallHit = true;
-        player.GetComponent<MonsterControlsScript>().StopPsyWallFunction();
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    //GameManager.Instance.psyWallHit = true;
+    //    player.GetComponent<MonsterControlsScript>().StopPsyWallFunction();
+    //}
 }
