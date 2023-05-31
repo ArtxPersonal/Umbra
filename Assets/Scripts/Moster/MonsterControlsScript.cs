@@ -44,6 +44,8 @@ public class MonsterControlsScript : MonoBehaviour
         {
             Debug.LogError("MonsterRigidBody = null");
         }
+        fakeMan = manPrefab.GetComponent<NavMeshAgent>();
+
     }
 
     private void OnEnable()
@@ -87,11 +89,10 @@ public class MonsterControlsScript : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 canFakeMan = false;
-                manPrefab.transform.position = transform.position;
+                manPrefab.transform.position = hit.point;
                 manPrefab.transform.rotation = transform.rotation;
                 manPrefab.SetActive(true);
                 //manCopy = Instantiate(manPrefab, hit.point, transform.rotation) as GameObject;
-                fakeMan = manPrefab.GetComponent<NavMeshAgent>();
                 fakeMan.destination = fakeMan.transform.position + fakeMan.transform.forward * 50;
                 StartCoroutine(FakeManActive());
             }
