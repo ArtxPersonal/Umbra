@@ -990,10 +990,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4605160197987373588, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4605160197987373591, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
       propertyPath: m_Name
       value: PsyWall
@@ -1002,20 +998,7 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1202133330457926501, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 2516457029300113193, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 4596709884318668939, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 7323693825251518380, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 2024610843347044428, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 2139021481955011181, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 4248715078433306526, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 7636101465597390728, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 3321628338568080538, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 6324014467696279478, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 796886492124352891, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 5540065915935964634, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-    - {fileID: 9060404402538240263, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
 --- !u!1 &1317755678
 GameObject:
@@ -1471,6 +1454,26 @@ PrefabInstance:
       propertyPath: fakeTarget
       value: 
       objectReference: {fileID: 387564999}
+    - target: {fileID: 6763025873725764197, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
+      propertyPath: m_Mass
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763025873725764197, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
+      propertyPath: m_Constraints
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7284338016189284581, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7284338016189284581, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
+      propertyPath: m_Acceleration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7284338016189284581, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8216363463278577508, guid: 126e4ffe058e4314aaaf1ba8989cdfe7, type: 3}
       propertyPath: m_Name
       value: Guard

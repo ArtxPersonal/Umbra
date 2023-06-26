@@ -13,7 +13,7 @@ public class PsyWallCol : MonoBehaviour
     // Start is called before the first frame update
     private void OnCollisionEnter(Collision other)
     {
-        if (other.collider.CompareTag("Guard") || other.collider.CompareTag("Player"))
+        if (other.collider.CompareTag("Guard"))
         {
            player.GetComponent<MonsterControlsScript>().StopPsyWallFunction();
         }

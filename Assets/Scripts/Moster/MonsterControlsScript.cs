@@ -26,15 +26,6 @@ public class MonsterControlsScript : MonoBehaviour
     [Header("SpeedBoost")]
     private bool speedBoost = true;
 
-
-    [Header("FakeMan")]
-    public GameObject manPrefab;
-    GameObject manCopy;
-    bool canFakeMan = true;
-    public GameObject poofParicleMan;
-    GameObject poofParticleManCopy;
-    private NavMeshAgent fakeMan;
-
     // Start is called before the first frame update
     void Awake()
     {
@@ -44,7 +35,7 @@ public class MonsterControlsScript : MonoBehaviour
         {
             Debug.LogError("MonsterRigidBody = null");
         }
-        fakeMan = manPrefab.GetComponent<NavMeshAgent>();
+        //fakeMan = manPrefab.GetComponent<NavMeshAgent>();
 
     }
 
@@ -61,7 +52,7 @@ public class MonsterControlsScript : MonoBehaviour
     {
         monsterControls.LandControls.PsyWall.performed += SpawnAtMousePosPsyWall;
         monsterControls.LandControls.Teleport.performed += SpeedBoost;
-        monsterControls.LandControls.FakeMan.performed += SpawnManAtMousPosFakeMan;
+        //monsterControls.LandControls.FakeMan.performed += SpawnManAtMousPosFakeMan;
     }
 
     // Update is called once per frame
@@ -77,54 +68,6 @@ public class MonsterControlsScript : MonoBehaviour
         monsterVelocity = new Vector3(monsterMovement.x * movementSpeed, monsterBody.velocity.y, monsterMovement.y * movementSpeed);
         monsterBody.velocity = transform.TransformDirection(monsterVelocity);
 
-    }
-
-    private void SpawnManAtMousPosFakeMan(InputAction.CallbackContext context)
-    {
-        if (Mouse.current.rightButton.wasPressedThisFrame && canFakeMan)
-        {
-            Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                canFakeMan = false;
-                manPrefab.transform.position = hit.point;
-                manPrefab.transform.rotation = transform.rotation;
-                manPrefab.SetActive(true);
-                //manCopy = Instantiate(manPrefab, hit.point, transform.rotation) as GameObject;
-                fakeMan.destination = fakeMan.transform.position + fakeMan.transform.forward * 50;
-                StartCoroutine(FakeManActive());
-            }
-        }
-    }
-    IEnumerator FakeManActive()
-    {
-        yield return new WaitForSeconds(10);
-        poofParicleMan.transform.position = manPrefab.transform.position;
-        poofParicleMan.transform.rotation = manPrefab.transform.rotation;
-        manPrefab.SetActive(false);
-        poofParicleMan.SetActive(true);
-        //poofParticleManCopy = Instantiate(poofParicleMan, manCopy.transform.position, manCopy.transform.rotation);
-        //Destroy(manCopy);
-        yield return new WaitForSeconds(1);
-        //Destroy(poofParticleManCopy);
-        poofParicleMan.SetActive(false);
-        canFakeMan = true;
-    }
-
-    IEnumerator StopFakeMan()
-    {
-        //poofParticleManCopy = Instantiate(poofParicleMan, manCopy.transform.position, manCopy.transform.rotation);
-        //Destroy(manCopy);
-        poofParicleMan.transform.position = manPrefab.transform.position;
-        poofParicleMan.transform.rotation = manPrefab.transform.rotation;
-        manPrefab.SetActive(false);
-        poofParicleMan.SetActive(true);
-        yield return new WaitForSeconds(1);
-        //Destroy(poofParticleManCopy);
-        poofParicleMan.SetActive(false);
-        canFakeMan = true;
     }
 
     private void SpawnAtMousePosPsyWall(InputAction.CallbackContext context)
