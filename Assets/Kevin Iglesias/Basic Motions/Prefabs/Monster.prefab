@@ -626,8 +626,12 @@ MonoBehaviour:
   cam: {fileID: 0}
   monsterBody: {fileID: -6148867193454648430}
   movementSpeed: 10
-  PsyWallPrefab: {fileID: 4605160197987373591, guid: 0dd3ddb327256b74388010fae36fbb78, type: 3}
-  poofParticleWall: {fileID: 3679318834660779514, guid: 7ee1f55b5b2176046a49faa769891ec9, type: 3}
+  animator: {fileID: 95509902755735526}
+  idle: {fileID: 9100000, guid: a8555c0cff30527479e32562cef9141f, type: 2}
+  walking: {fileID: 9100000, guid: 6cc513001c84c714baa94b6d24a332c4, type: 2}
+  PsyWallPrefab: {fileID: 0}
+  poofParticleWall: {fileID: 0}
+  stopPsyWallCoroutineBool: 0
 --- !u!114 &3824844267595205287
 MonoBehaviour:
   m_ObjectHideFlags: 0

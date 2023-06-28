@@ -6,16 +6,12 @@ public class PsyWallCol : MonoBehaviour
 {
     public GameObject player;
 
-    private void Awake()
+    private void OnTriggerEnter(Collider other)
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-    }
-    // Start is called before the first frame update
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.collider.CompareTag("Guard"))
+        if (other.CompareTag("GuardHead"))
         {
-           player.GetComponent<MonsterControlsScript>().StopPsyWallFunction();
+            player.GetComponent<MonsterControlsScript>().StopPsyWallFunction();
+            other.gameObject.GetComponentInParent<Patrol>().HitPsyWall();
         }
     }
 }

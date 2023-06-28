@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Guard
   - FakePlayer
+  - GuardHead
   layers:
   - Default
   - TransparentFX

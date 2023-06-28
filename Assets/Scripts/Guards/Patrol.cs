@@ -29,10 +29,16 @@ public class Patrol : MonoBehaviour
     private bool playerVisibleFirst = false;
 
     [Header("SearchForPlayer")]
-    private float searchRadius = 50;
+    private float searchRadius = 30;
     private Vector3 randomSearch;
     private bool searchForPlayerCheck = false;
     private float searchTimer = 0;
+
+    [Header("Animation")]
+    public Animator animator;
+    public RuntimeAnimatorController idle;
+    public RuntimeAnimatorController walking;
+    public RuntimeAnimatorController running;
        
     private void Awake()
     {
@@ -41,7 +47,7 @@ public class Patrol : MonoBehaviour
 
     void Start()
     {
-        
+        animator.runtimeAnimatorController = idle;
     }
 
     // Update is called once per frame
@@ -65,15 +71,28 @@ public class Patrol : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Player"))
                 {
-                    //add distance check for timer countdown speed
-
-                    playerVisible = true;
-
-                    if (alert == true)
+                    if (hit.distance < 10f && timer < 3f)
                     {
                         timer = 3f;
                     }
+                    else if (hit.distance < 20f && timer < 2f)
+                    {
+                        timer = 2f;
+                    }
+                    else if (hit.distance < 30f && timer < 1f)
+                    {
+                        timer = 1f;
+                    }
+
+                    if (alert == true && timer < 2.5f)
+                    {
+                        timer = 2.5f;
+                    }
+
+                    Debug.Log(hit.distance);
+                    playerVisible = true;
                     transform.LookAt(target);
+
                     if (timer < 3)
                     {
                         timer += Time.deltaTime;
@@ -115,6 +134,7 @@ public class Patrol : MonoBehaviour
 
             Vector3 _moveTo = playerLastLocation;
             guardNav.destination = _moveTo;
+            animator.runtimeAnimatorController = running;
 
             if (!guardNav.hasPath)
             {
@@ -141,7 +161,8 @@ public class Patrol : MonoBehaviour
             {
                 countDownToIdle = 0f;
                 timer = 0f;
-                CheckAlert();
+                animator.runtimeAnimatorController = idle;
+                //TODO return to patorl or guard point
             }
         }
     }
@@ -155,18 +176,15 @@ public class Patrol : MonoBehaviour
             NavMeshHit hit;
             NavMesh.SamplePosition(randomSearch, out hit, searchRadius, 1);
             Vector3 finalPosition = hit.position;
-            transform.LookAt(finalPosition);
-            guardNav.destination = finalPosition;
+            if (finalPosition != null)
+            {
+                transform.LookAt(finalPosition);
+                guardNav.destination = finalPosition;
+                animator.runtimeAnimatorController = running;
+            }
         }
     }
 
-    private void CheckAlert()
-    {
-        if (/*!fakePlayerNoticed && fakePlayerLost &&*/ !playerNoticed && playerLost)
-        {
-            alert = false;
-        }
-    }
     private void PatrolArea()
     {
         if (playerSeen == false)
@@ -182,11 +200,6 @@ public class Patrol : MonoBehaviour
         {
             playerSeen = true;
         }
-
-        //if(other.CompareTag("FakePlayer"))
-        //{
-        //    fakePlayerSeen = true;
-        //}
     }
 
     private void OnTriggerExit(Collider other)
@@ -195,10 +208,10 @@ public class Patrol : MonoBehaviour
         {
             playerSeen = false;
         }
+    }
 
-        //if (other.CompareTag("FakePlayer"))
-        //{
-        //    fakePlayerSeen = false;
-        //}
+    public void HitPsyWall()
+    {
+        alert = true;
     }
 }

@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.AI;
+using UnityEngine.Animations;
 
 public class MonsterControlsScript : MonoBehaviour
 {
     private MonsterControls monsterControls;
     private Vector3 monsterVelocity;
     public Camera cam;
+    private Vector3 cameraPosition;
 
     [Header("MonsterMovement")]
     public Rigidbody monsterBody;
     [SerializeField] private int movementSpeed = 8;
     private Vector2 monsterMovement;
+
+    [Header("MonsterAnimation")]
+    Vector3 idleVelocity = new Vector3(0, 0, 0);
+    public Animator animator;
+    public RuntimeAnimatorController idle;
+    public RuntimeAnimatorController walking;
 
     [Header("PsyWall")]
     private bool canPsyWall = true;
@@ -31,6 +39,7 @@ public class MonsterControlsScript : MonoBehaviour
     {
         monsterControls = new MonsterControls();
         monsterBody = GetComponent<Rigidbody>();
+        cameraPosition = cam.transform.localPosition;
         if (monsterBody == null)
         {
             Debug.LogError("MonsterRigidBody = null");
@@ -67,6 +76,16 @@ public class MonsterControlsScript : MonoBehaviour
         monsterMovement = monsterControls.LandControls.Move.ReadValue<Vector2>();
         monsterVelocity = new Vector3(monsterMovement.x * movementSpeed, monsterBody.velocity.y, monsterMovement.y * movementSpeed);
         monsterBody.velocity = transform.TransformDirection(monsterVelocity);
+        if(monsterVelocity == idleVelocity)
+        {
+            animator.runtimeAnimatorController = idle;
+            cam.transform.localPosition = cameraPosition;
+        }
+        if(monsterVelocity.z > idleVelocity.z)
+        {
+            animator.runtimeAnimatorController = walking;
+            cam.transform.localPosition = cameraPosition + new Vector3(0, 0, 0.5f);
+        }
 
     }
 
@@ -89,37 +108,12 @@ public class MonsterControlsScript : MonoBehaviour
     }
     IEnumerator PsyWallActive()
     {
-        yield return new WaitForSeconds(5);
-        if(stopPsyWallCoroutineBool == true)
-        {
-            stopPsyWallCoroutineBool = false;
-            yield break;
-        }
-        //if(PsyWallCopy == null)
-        //{
-        //    poofParticleWallCopy = Instantiate(poofParticleWall, PsyWallCopy.transform.position, PsyWallCopy.transform.rotation);
-        //    yield return new WaitForSeconds(1);
-        //    Destroy(poofParticleWallCopy);
-        //    canPsyWall = true;
-        //    yield break;
-        //}
-
-        //poofParticleWallCopy = Instantiate(poofParticleWall, PsyWallCopy.transform.position, PsyWallCopy.transform.rotation);
-        //Destroy(PsyWallCopy);
-        PsyWallPrefab.SetActive(false);
-        poofParticleWall.transform.position = PsyWallPrefab.transform.position;
-        poofParticleWall.SetActive(true);
-        yield return new WaitForSeconds(1);
-        poofParticleWall.SetActive(false);
-        //Destroy(poofParticleWallCopy);
         yield return new WaitForSeconds(10);
         canPsyWall = true;
-        yield break;
     }
 
     IEnumerator StopPsyWall()
     {
-        //poofParticleWallCopy = Instantiate(poofParticleWall, PsyWallCopy.transform.position, PsyWallCopy.transform.rotation);
         poofParticleWall.transform.position = PsyWallPrefab.transform.position;
         PsyWallPrefab.SetActive(false);
         poofParticleWall.SetActive(true);
@@ -134,7 +128,6 @@ public class MonsterControlsScript : MonoBehaviour
     {
         stopPsyWallCoroutineBool = true;
         StartCoroutine(StopPsyWall());
-        StopCoroutine(PsyWallActive());
     }
 
     public void SpeedBoost(InputAction.CallbackContext context)
